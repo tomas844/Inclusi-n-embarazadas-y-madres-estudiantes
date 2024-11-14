@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inclusión, embarazadas y madres estudiantes</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Merriweather:wght@700&display=swap">
+    <style>
+        /* Configuración global */
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            background-color: #f4f6f9;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Encabezado */
+        .navbar {
+            width: 100%;
+            background-color: #004085;
+            padding: 15px 20px;
+            color: white;
+            text-align: center;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            font-size: 1.8em;
+            font-family: 'Merriweather', serif;
+            margin: 0;
+            color: #f8f9fa;
+        }
+
+        /* Botones y mensajes de error */
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button {
+            background-color: #6c757d;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        .error {
+            color: #e3342f;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* Contenedores */
+        .screen {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            transition: opacity 0.5s ease;
+        }
+
+        .screen.visible {
+            display: flex;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 90%;
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Diseño de formulario */
+        form {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            text-align: right;
+            padding-right: 10px;
+            color: #333;
+        }
+
+        input[type="text"], input[type="date"] {
+            padding: 12px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="date"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+            outline: none;
+        }
+
+        /* Hero/banner principal */
+        .hero {
+            background-image: url('https://i.ibb.co/61djLGq/USM-AOT6-JQQ8-C-transformed.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ffffff;
+            padding: 20px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        .hero h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 3em;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px 40px;
+            border-radius: 15px;
+            z-index: 1;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            max-width: 700px;
+            line-height: 1.6;
+            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 15px 30px;
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        /* Sección de contenido */
+        .content {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            flex-wrap: wrap;
+            gap: 30px;
+            background-color: #f8f9fa;
+        }
+
+        .section {
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .section h3 {
+            color: #007bff;
+            font-size: 1.6em;
+            border-bottom: 2px solid #ffc107;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Ajustes responsivos */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2em;
+            }
+
+            .hero p {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Universidad Técnica Federico Santa María</h1>
+    </div>
+
+    <!-- Pantalla de bienvenida -->
+    <div id="welcomeScreen" class="screen visible">
+        <div class="container">
+            <h2>Bienvenido</h2>
+            <button onclick="showCreateAccount()">Crear cuenta</button>
+            <button onclick="showLogin()">Iniciar sesión</button>
+        </div>
+    </div>
+
+    <!-- Formulario de creación de cuenta -->
+    <div id="createAccountScreen" class="screen">
+        <div class="container">
+            <h2>Crear cuenta</h2>
+            <form id="createAccountForm">
+                <label for="firstName">Nombre:</label>
+                <input type="text" id="firstName" required>
+                
+                <label for="lastName">Apellido:</label>
+                <input type="text" id="lastName" required>
+                
+                <label for="password">Rol USM:</label>
+                <input type="text" id="password" required>
+                
+                <button type="submit" class="submit-button">Registrar</button>
+            </form>
+            <button class="back-button" onclick="goBack()">Volver</button>
+            <p id="createError" class="error"></p>
+        </div>
+    </div>
+
+    <!-- Formulario de inicio de sesión -->
+    <div id="loginScreen" class="screen">
+        <div class="container">
+            <h2>Iniciar sesión</h2>
+            <form id="loginForm">
+                <label for="loginFirstName">Nombre:</label>
+                <input type="text" id="loginFirstName" required>
+                
+                <label for="loginLastName">Apellido:</label>
+                <input type="text" id="loginLastName" required>
+                
+                <label for="loginPassword">Ingrese contraseña:</label>
+                <input type="text" id="loginPassword" required>
+                
+                <button type="submit" class="submit-button">Ingresar</button>
+            </form>
+            <button class="back-button" onclick="goBack()">Volver</button>
+            <p id="loginError" class="error"></p>
+        </div>
+    </div>
+
+    <!-- Contenido principal después del inicio de sesión -->
+    <div id="mainContent" class="screen">
+        <div class="hero">
+            <h2>Inclusión, embarazadas y madres estudiantes</h2>
+            <p>Programa de apoyo a estudiantes embarazadas y madres para continuar sus estudios superiores.</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h3>Biblioteca de Recursos</h3>
+                <p>Guía para madres jóvenes.</p>
+            </div>
+
+            <div class="section">
+                <h3>Calendario de Control Prenatal</h3>
+                <form id="appointmentForm">
+                    <label for="appointmentDate">Fecha de cita:</label>
+                    <input type="date" id="appointmentDate" required>
+                    
+                    <label for="appointmentDetails">Detalles:</label>
+                    <input type="text" id="appointmentDetails" required>
+                    
+                    <button type="submit" class="submit-button">Agregar Cita</button>
+                </form>
+                <ul id="appointmentList"></ul>
+            </div>
+        </div>
+        <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        function showCreateAccount() { toggleVisibility('createAccountScreen'); }
+        function showLogin() { toggleVisibility('loginScreen'); }
+        function goBack() { toggleVisibility('welcomeScreen'); clearErrors(); }
+
+        function toggleVisibility(screen) {
+            document.querySelectorAll('.screen').forEach(div => div.classList.remove('visible'));
+            document.getElementById(screen).classList.add('visible');
+        }
+
+        function clearErrors() {
+            document.getElementById('createError').textContent = "";
+            document.getElementById('loginError').textContent = "";
+        }
+
+        function isValidRol(rol) { return /^[0-9]{9}[0-9kK]$/.test(rol); }
+
+        document.getElementById('createAccountForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!isValidRol(password)) {
+                document.getElementById('createError').textContent = "Rol USM inválido.";
+                return;
+            }
+
+            const userKey = `${firstName}_${lastName}`;
+            localStorage.setItem(userKey, JSON.stringify({ firstName, lastName, password }));
+            localStorage.setItem(`${userKey}_appointments`, JSON.stringify([]));
+            alert("Cuenta creada exitosamente.");
+            goBack();
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const firstName = document.getElementById('loginFirstName').value.trim();
+            const lastName = document.getElementById('loginLastName').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const userKey = `${firstName}_${lastName}`;
+            const storedUser = JSON.parse(localStorage.getItem(userKey));
+
+            if (storedUser && storedUser.password === password) {
+                currentUser = userKey;
+                loadAppointments();
+                toggleVisibility('mainContent');
+            } else {
+                document.getElementById('loginError').textContent = "Credenciales incorrectas.";
+            }
+        });
+
+        document.getElementById('appointmentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const date = document.getElementById('appointmentDate').value;
+            const details = document.getElementById('appointmentDetails').value;
+            const appointments = JSON.parse(localStorage.getItem(`${currentUser}_appointments`)) || [];
+            appointments.push({ date, details });
+            localStorage.setItem(`${currentUser}_appointments`, JSON.stringify(appointments));
+            displayAppointment(date, details);
+            document.getElementById('appointmentDate').value = '';
+            document.getElementById('appointmentDetails').value = '';
+        });
+
+        function displayAppointment(date, details) {
+            const appointmentItem = document.createElement('li');
+            appointmentItem.textContent = `${date} - ${details}`;
+            document.getElementById('appointmentList').appendChild(appointmentItem);
+        }
+
+        function loadAppointments() {
+            const appointments = JSON.parse(localStorage.getItem(`${currentUser}_appointments`)) || [];
+            document.getElementById('appointmentList').innerHTML = '';
+            appointments.forEach(app => displayAppointment(app.date, app.details));
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('appointmentList').innerHTML = '';
+            toggleVisibility('welcomeScreen');
+        }
+    </script>
+</body>
+</html>
